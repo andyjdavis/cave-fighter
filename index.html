@@ -1,6 +1,28 @@
 <html>
 <body>
-<canvas id="gamecanvas" width="600" height="420" style="position:absolute;top:0;left:0;border:1px solid #000000;"></canvas>
+<canvas id="gamecanvas" width="800" height="600" style="position:absolute;top:0;left:0;border:1px solid #000000;"></canvas>
 </body>
-<SCRIPT LANGUAGE="JavaScript" SRC="ship.js"></SCRIPT>
+<script type='text/javascript' > 
+var gImages = null;
+var gCanvas = null;
+var gContext = null;
+var gMap = null;
+var gKeyState = Array();
+var gLoopcount = 0;
+var gSettings = null;
+var gPlayer = null;
+var gEnemies = null;
+var gCamera = null;
+var gState = null;
+</script>
+<SCRIPT LANGUAGE="javascript" SRC="util.js"></SCRIPT>
+<!--<SCRIPT LANGUAGE="javascript" SRC="Class.js"></SCRIPT>-->
+<SCRIPT LANGUAGE="javascript" SRC="ImageManager.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="StateManager.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="MapGenerator.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="Ship.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="Fighter.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="Ufo.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="PlayerFighter.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="game.js"></SCRIPT>
 </html>
