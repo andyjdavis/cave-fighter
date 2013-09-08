@@ -29,10 +29,10 @@ game.Fighter.prototype.draw = function() {
     }
     game.Ship.prototype.draw.call(this, drawpos);
     
-    for (var i in this.bullets) {
+    /*for (var i in this.bullets) {
         drawpos = getDrawPos(this.bullets[i].pos);
         drawRect(gContext, drawpos[0], drawpos[1], 1, 1, 'white');
-    }
+    }*/
 };
 game.Fighter.prototype.update = function(dt) {
     if (gLoopcount % 10 == 0 && this.bulletammo < 200) {

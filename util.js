@@ -1,5 +1,5 @@
-function drawRect(context, x, y, width, height, color) {
-    context.fillStyle = color;
+
+function drawRect(context, x, y, width, height) {
     context.fillRect(x, y, width, height);
 }
 function drawBox(context, x, y, width, height, color) {

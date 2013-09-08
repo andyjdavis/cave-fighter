@@ -6,6 +6,7 @@ game.PlayerFighter = function(pos) {
     this.hudcolor = "#88CEFA";
     this.treasure = false;
     game.Fighter.call(this, pos, true);
+    this.showlife = false;
 }
 game.PlayerFighter.prototype = new game.Fighter();
 game.PlayerFighter.prototype.constructor = game.PlayerFighter;
@@ -13,9 +14,9 @@ game.PlayerFighter.prototype.constructor = game.PlayerFighter;
 game.PlayerFighter.prototype.draw = function() {
     game.Fighter.prototype.draw.call(this);
 
-    var height = (this.bulletammo/200)*40;
-    drawRect(gContext, 20, 60 - height, 10, height, this.hudcolor);
-    drawBox(gContext, 20, 20, 10, 40, this.hudcolor);
+    //var height = (this.bulletammo/200)*40;
+    //drawRect(gContext, 20, 60 - height, 10, height, this.hudcolor);
+    //drawBox(gContext, 20, 20, 10, 40, this.hudcolor);
 };
 
 game.PlayerFighter.prototype.update = function(dt) {
@@ -25,12 +26,12 @@ game.PlayerFighter.prototype.update = function(dt) {
         this.vel[1] += vect[1];
     }
     if (gKeyState[65]) { //a - strafe left
-        this.vel[0] += Math.sin(this.angle - (Math.PI/2)) * 0.5;
-        this.vel[1] -= Math.cos(this.angle - (Math.PI/2)) * 0.5;
+        this.vel[0] += Math.sin(this.angle - (Math.PI/2)) * 0.25;
+        this.vel[1] -= Math.cos(this.angle - (Math.PI/2)) * 0.25;
     }
     if (gKeyState[68]) { //d - strafe right
-        this.vel[0] += Math.sin(this.angle + (Math.PI/2)) * 0.5;
-        this.vel[1] -= Math.cos(this.angle + (Math.PI/2)) * 0.5;
+        this.vel[0] += Math.sin(this.angle + (Math.PI/2)) * 0.25;
+        this.vel[1] -= Math.cos(this.angle + (Math.PI/2)) * 0.25;
     }
 
     if (gKeyState[74]) { //j - rotate left

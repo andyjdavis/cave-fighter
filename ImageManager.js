@@ -10,9 +10,10 @@ game.ImageManager = function() {
     this.numImagesLoaded = 0;
     this.imagedict = {
         'starship': 'resources/starship.png',
-        'ufo': 'resources/ufo.png'
+        'ufo': 'resources/ufodark.png',
+        'exit': 'resources/exit.png'
     };
-    this.images = Array(2);
+    this.images = Array(3);
     for (var name in this.imagedict) {
         this.images[name] = new Image();
         this.images[name].onload = onImageLoad;
