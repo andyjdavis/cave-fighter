@@ -49,7 +49,7 @@ game.Ufo.prototype.update = function(dt) {
         if (this.state != gUfoState.charging) {
             if (calcDistance(calcVector(this.pos, gPlayer.pos)) < gSettings.tilesize * 5) {
                 this.state = gUfoState.charging;
-                //to do play angry sound
+                gSounds.play("attack");
             } /*else if (this.state == gUfoState.wandering) {
                 if (this.goal == null) {
                     console.log("need goal");

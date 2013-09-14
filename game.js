@@ -16,7 +16,9 @@ gContext = gCanvas.getContext('2d');
 gSettings = {
     tilesize: 40,
     tileswidth: 15,
-    tilesheight: 15
+    tilesheight: 15,
+    textcolor: 'Blue',
+    textsize: '18pt Arial'
 }
 gTiles = {
     EMPTY: 0,
@@ -26,6 +28,12 @@ gTiles = {
 
 
 function onKeyDown(event) {
+    state = gState.getState();
+    if (state == gState.states.PREGAME || state == gState.states.ENDGAME) {
+        if (event.keyCode == 68) {
+            newGame();
+        }
+    }
     /*if (gState == State.PREGAME || gState == State.ENDGAME) {
         if (event.keyCode == 88) { // 'x' to start game
             newGame();
@@ -45,17 +53,21 @@ window.addEventListener('keyup', onKeyUp, false);
 
 function newGame() {
     gLevel = 0;
-    nextLevel();
     gState.setState(gState.states.INGAME);
+    nextLevel();
+    
+    gSounds.volume("music", 0.5);
+    gSounds.play("music", true);
 }
 function nextLevel() {
-    gLevel++;
     
+    gLevel++;
     //var multiplier = Math.ceil(gLevel/2);
-    var multiplier = 1.5;
-    gSettings.tileswidth  = Math.floor(gSettings.tileswidth * multiplier);
-    gSettings.tilesheight = Math.floor(gSettings.tilesheight * multiplier);
-    console.log(gSettings.tileswidth);
+    //var multiplier = 1.5;
+    //gSettings.tileswidth  = Math.floor(gSettings.tileswidth * multiplier);
+    //gSettings.tilesheight = Math.floor(gSettings.tilesheight * multiplier);
+    gSettings.tileswidth  = 100;
+    gSettings.tilesheight = 100;
     
     setupLevel();
 }
@@ -64,8 +76,8 @@ function setupLevel() {
     var mapgen = new game.MapGenerator();
     mapgen.generate(); // Also positions the player
     
-    var monsters = (gLevel*gLevel) + 1;
-    console.log("spawning"+monsters);
+    //var monsters = (gLevel*gLevel) + 1;
+    var monsters = 30;
     for (var i = 0; i < monsters; i++) {
         spawnEnemy();
     }
@@ -108,7 +120,9 @@ function updateGame(dt) {
         gPlayer.update(dt);
         if (gPlayer.treasure) {
             // treasure reached
-            nextLevel();
+            //nextLevel();
+            gState.setState(gState.states.ENDGAME);
+            return;
         }
     }
 
@@ -131,23 +145,42 @@ function updateGame(dt) {
 function checkCollisions() {
     for (var i in gEnemies) {
         if (gPlayer.circleCollide(gEnemies[i])) {
+            gSounds.play("explosion");
             setupLevel();
         }
     }
 }
 
 function drawGame() {
-    //if (gOldCamera[0] != gCamera[0] || gOldCamera[1] != gCamera[1]) {
-        gContext.clearRect(0, 0, gCanvas.width, gCanvas.height);
-        drawTerrain();
-        drawText(gContext, gLevel, '18pt Arial', 'Blue', gCanvas.width - 30, 30);
-    //}
-    
-    if (gPlayer) {
-        gPlayer.draw();
-    }
-    for (var i in gEnemies) {
-        gEnemies[i].draw();
+    var state = gState.getState();
+    if (state == gState.states.PREGAME) {
+        drawText(gContext, "Ascent pt 1", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 100);
+        drawText(gContext, "You are alone and unarmed", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 200);
+        drawText(gContext, "There is only one way out...", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 250);
+        drawText(gContext, "A and D, strafe left and right", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 350);
+        drawText(gContext, "J and L, turn left and right", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 400);
+        drawText(gContext, "I to accelerate", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 450);
+        drawText(gContext, "Press strafe right to begin", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 500);
+        gContext.drawImage(gImages.getImage('exit'), 40, gCanvas.height/2, gSettings.tilesize, gSettings.tilesize);
+        gContext.drawImage(gImages.getImage('starship'), gCanvas.width - 80, gCanvas.height/2, 30, 30);
+    } else if (state == gState.states.INGAME) {
+        //if (gOldCamera[0] != gCamera[0] || gOldCamera[1] != gCamera[1]) {
+            gContext.clearRect(0, 0, gCanvas.width, gCanvas.height);
+            drawTerrain();
+            //drawText(gContext, gLevel, gSettings.textsize, gSettings.textcolor, gCanvas.width - 30, 30);
+        //}
+        
+        if (gPlayer) {
+            gPlayer.draw();
+        }
+        for (var i in gEnemies) {
+            gEnemies[i].draw();
+        }
+    } else if (state == gState.states.ENDGAME) {
+        drawText(gContext, "Ascent pt 1", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 100);
+        drawText(gContext, "Congratulations on your valiant escape!", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 200);
+        drawText(gContext, "The cave is randomly generated", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 250);
+        drawText(gContext, "Press strafe right to play again", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 350);
     }
 }
 function drawTerrain() {
@@ -220,20 +253,21 @@ gCamera = [0, 0];
 //var gOldCamera = [0, 0];
 //var gDrawnTerrain = false;
 
-newGame();
-
 //executed 60/second
 var mainloop = function() {
-    gNewtime = Date.now();
-    dt = (gNewtime - gOldTime)/1000;
-    gOldTime = gNewtime;
-    
-    gLoopcount++;
-    gLoopcount %= 1000;
+    state = gState.getState();
+    if (state == gState.states.INGAME) {
+        gNewtime = Date.now();
+        dt = (gNewtime - gOldTime)/1000;
+        gOldTime = gNewtime;
+        
+        gLoopcount++;
+        gLoopcount %= 1000;
 
-    updateGame(dt);
-    checkCollisions();
-    moveCamera();
+        updateGame(dt);
+        checkCollisions();
+        moveCamera();
+    }
     drawGame();
 };
 

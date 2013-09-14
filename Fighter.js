@@ -13,6 +13,9 @@ game.Fighter.prototype.constructor = game.Fighter;
  
 game.Fighter.prototype.draw = function() {
     var drawpos = getDrawPos(this.pos);
+    //drawpos[0] -= ;
+    //drawpos[0] -= 2;
+    var drawsize = this.size+2;
     
     var img = gImages.getImage('starship');
     if (img) {
@@ -24,10 +27,16 @@ game.Fighter.prototype.draw = function() {
         gContext.translate(xtranslate, ytranslate);
         gContext.rotate(this.angle); // rotate
         gContext.translate(-xtranslate, -ytranslate);
-        gContext.drawImage(img, drawpos[0], drawpos[1], this.size, this.size);
+        gContext.drawImage(img, drawpos[0]-1, drawpos[1]-1, drawsize, drawsize);
         gContext.restore(); // restore original states (no rotation etc)
     }
     game.Ship.prototype.draw.call(this, drawpos);
+    
+    /*gContext.beginPath();
+      gContext.arc(drawpos[0] + this.size/2 +2, drawpos[1]+this.size/2 + 2, this.size/2, 0, 2 * Math.PI, false);
+      gContext.lineWidth = 2;
+      gContext.strokeStyle = '#003300';
+      gContext.stroke();*/
     
     /*for (var i in this.bullets) {
         drawpos = getDrawPos(this.bullets[i].pos);
@@ -63,7 +72,7 @@ game.Fighter.prototype.update = function(dt) {
     this.vel[0] = this.applyFriction(this.vel[0]);
     this.vel[1] = this.applyFriction(this.vel[1]);
     
-    var rem = Array();
+    /*var rem = Array();
     var mapsize = getMapSize();
     var tile = null;
     for (var i in this.bullets) {
@@ -84,7 +93,7 @@ game.Fighter.prototype.update = function(dt) {
     }
     for (var i in rem) {
         this.bullets.splice(i, 1);
-    }
+    }*/
 };
 game.Fighter.prototype.shoot = function() {
     if (this.bulletammo > 0) {
