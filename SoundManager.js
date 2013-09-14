@@ -12,7 +12,7 @@ game.SoundManager = function() {
     try {
         //this._context = new webkitAudioContext();
         
-        this.sounds['music'] = new Audio("resources/TheComplex.ogg");
+        this.sounds['music'] = new Audio("resources/music.ogg");
         this.sounds['explosion'] = new Audio("resources/explosion.ogg");
         this.sounds['attack'] = new Audio("resources/attack.ogg");
         

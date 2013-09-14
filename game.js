@@ -56,7 +56,7 @@ function newGame() {
     gState.setState(gState.states.INGAME);
     nextLevel();
     
-    gSounds.volume("music", 0.5);
+    //gSounds.volume("music", 0.5);
     gSounds.play("music", true);
 }
 function nextLevel() {
