@@ -151,18 +151,34 @@ function checkCollisions() {
     }
 }
 
-function drawGame() {
-    var state = gState.getState();
-    if (state == gState.states.PREGAME) {
-        drawText(gContext, "Ascent pt 1", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 100);
-        drawText(gContext, "You are alone and unarmed", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 200);
-        drawText(gContext, "There is only one way out...", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 250);
-        drawText(gContext, "A and D, strafe left and right", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 350);
-        drawText(gContext, "J and L, turn left and right", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 400);
-        drawText(gContext, "I to accelerate", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 450);
-        drawText(gContext, "Press strafe right to begin", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 500);
+function drawInstructions(showImages) {
+    drawText(gContext, "Ascent pt 1", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 100);
+    drawText(gContext, "You are alone and unarmed", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 200);
+    drawText(gContext, "There is only one way out...", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 250);
+    drawText(gContext, "A and D, strafe left and right", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 350);
+    drawText(gContext, "J and L, turn left and right", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 400);
+    drawText(gContext, "I to accelerate", gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 450);
+    if (showImages) {
         gContext.drawImage(gImages.getImage('exit'), 40, gCanvas.height/2, gSettings.tilesize, gSettings.tilesize);
         gContext.drawImage(gImages.getImage('starship'), gCanvas.width - 80, gCanvas.height/2, 30, 30);
+    }
+}
+function drawGame() {
+    var state = gState.getState();
+    if (state == gState.states.LOADING) {
+        drawInstructions(false);
+        total = gSounds.sounds.length + gImages.images.length;
+        loaded = gSounds.numSoundsLoaded + gImages.numImagesLoaded;
+        if (loaded < total) {
+            gState.setState(gState.states.PREGAME);
+            var text = "Loading...    "+loaded+"/"+total;
+            drawText(gContext, text, gSettings.textsize, gSettings.textcolor, gCanvas.width/3, 500);
+            gContext.clearRect(0, 0, gCanvas.width, gCanvas.height);
+            return;
+        }
+    } else if (state == gState.states.PREGAME) {
+        drawInstructions(true);
+        drawText(gContext, "Press strafe right to begin", gSettings.textsize, "white", gCanvas.width/3, 500);
     } else if (state == gState.states.INGAME) {
         //if (gOldCamera[0] != gCamera[0] || gOldCamera[1] != gCamera[1]) {
             gContext.clearRect(0, 0, gCanvas.width, gCanvas.height);

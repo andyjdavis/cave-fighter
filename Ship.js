@@ -14,8 +14,7 @@ game.Ship = function(pos, size, angularVel, maxhealth) {
     this.showlife = false;
 };
 game.Ship.prototype.update = function(dt) {
-    if (this.vel == undefined) {
-        //how does this happen?
+    if (this.vel == undefined || gMap == undefined) {
         return;
     }
     var deltaX = this.vel[0] * dt * 10;

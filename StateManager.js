@@ -4,12 +4,13 @@ window.game = window.game || { };
 
 game.StateManager = function() {
     this.states = {
-        PREGAME: 0,
-        INGAME: 1,
-        BETWEENLEVELS: 2,
-        END: 3
+        LOADING: 0,
+        PREGAME: 1,
+        INGAME: 2,
+        BETWEENLEVELS: 3,
+        END: 4
     };
-    this.state = this.states.PREGAME;
+    this.state = this.states.LOADING;
 };
 
 game.StateManager.prototype.setState = function(s) {
